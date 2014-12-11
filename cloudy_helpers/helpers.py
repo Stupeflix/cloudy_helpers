@@ -17,9 +17,9 @@ class GruntUwsgiDeployScript(PythonDeployScript):
     #     'server': '',
     #     'dir': '',
     #     'user': '',
-    #     'app_path': {
-    #         'app': 'relative_path'
-    #     }
+    #     'app_path': [
+    #         ('app', 'relative_path'),
+    #     ]
     # }
 
     def setup_packages(self):

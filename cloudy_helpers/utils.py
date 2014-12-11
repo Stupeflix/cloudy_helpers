@@ -15,5 +15,5 @@ def sync_statics(statics):
             folder,
             '%s@%s:%s' % (
                 statics['user'],
-                os.path.join(statics['dir'], name),
-                statics['server']))
+                statics['server'],
+                os.path.join(statics['dir'], name)))
