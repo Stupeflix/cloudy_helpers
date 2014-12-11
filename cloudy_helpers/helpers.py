@@ -1,7 +1,7 @@
 import os.path as op
 
 from cloudy_helpers.utils import sync_statics
-from cloudyclient.api import PythonDeployScript, render_template, sudo, run
+from cloudyclient.api import PythonDeployScript, render_template, sudo, run, cd
 
 
 class GruntUwsgiDeployScript(PythonDeployScript):
@@ -51,17 +51,13 @@ class GruntUwsgiDeployScript(PythonDeployScript):
                 use_sudo=True)
 
     def npm_install(self):
-        npm_dir = self.dvars['npm_dir']
+        npm_dir = op.expanduser(self.dvars['npm_dir'])
 
-        # Create node_modules dir
-        if not op.exists(npm_dir):
-            run('mkdir', '-p', npm_dir)
+        run('cp', '-f', 'packages.json', op.join(npm_dir, '..', 'packages.json'))
+        with cd(op.join(npm_dir, '..')):
+            run('npm', 'install', '-d')
 
-        # Link node_modules
-        if not op.exists('node_modules'):
-            run('ln', '-sf', npm_dir, 'node_modules')
-
-        run('npm', 'install', '-d')
+        run('ln', '-sf', npm_dir, 'node_modules')
 
     def deploy_with_grunt(self):
         self.npm_install()
