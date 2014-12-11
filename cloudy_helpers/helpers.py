@@ -1,5 +1,6 @@
 import os.path as op
 
+from cloudy_helpers.utils import sync_statics
 from cloudyclient.api import PythonDeployScript, render_template, sudo, run
 
 
@@ -11,6 +12,15 @@ class GruntUwsgiDeployScript(PythonDeployScript):
     use_wheel = True
     conf_files = []
     requirements = []
+
+    # statics = {
+    #     'server': '',
+    #     'dir': '',
+    #     'user': '',
+    #     'app_path': {
+    #         'app': 'relative_path'
+    #     }
+    # }
 
     def setup_packages(self):
         pass
@@ -49,6 +59,10 @@ class GruntUwsgiDeployScript(PythonDeployScript):
     def install(self):
         self.copy_conf_files()
         self.deploy_with_grunt()
+
+        # Sync statics to a custom server
+        if hasattr(self, 'statics'):
+            sync_statics(self.statics)
 
     def get_config_context(self, **kwargs):
         context = self.dvars.copy()
