@@ -53,8 +53,9 @@ class GruntUwsgiDeployScript(PythonDeployScript):
     def npm_install(self):
         npm_dir = op.expanduser(self.dvars['npm_dir'])
 
-        run('cp', '-f', 'package.json', op.join(npm_dir, '..', 'package.json'))
-        with cd(op.join(npm_dir, '..')):
+        npm_parent_dir = op.dirname(npm_dir)
+        run('cp', '-f', 'package.json', op.join(npm_parent_dir, 'package.json'))
+        with cd(npm_parent_dir):
             run('npm', 'install', '-d')
 
         run('ln', '-sf', npm_dir, 'node_modules')
