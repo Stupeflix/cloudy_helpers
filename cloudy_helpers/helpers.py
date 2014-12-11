@@ -1,3 +1,4 @@
+import os
 import os.path as op
 
 from cloudy_helpers.utils import sync_statics
@@ -77,8 +78,7 @@ class GruntUwsgiDeployScript(PythonDeployScript):
         context = self.dvars.copy()
         context.update(kwargs)
         context['base_dir'] = self.ddata['base_dir']
-        context['dist_dir'] = op.abspath(op.join(
-            op.dirname(__file__), '..', 'dist'))
+        context['dist_dir'] = op.abspath(op.join(os.getcwd(), 'dist'))
         context['static_dir'] = op.join(context['dist_dir'], 'static')
         return context
 
